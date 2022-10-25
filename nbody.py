@@ -70,6 +70,10 @@ PAIRS = tuple(combinations(SYSTEM))
 
 
 def advance(dt, n, bodies=SYSTEM, pairs=PAIRS):
+    textfile = "python" + str(sys.argv[1]) + ".txt"
+    f = open(textfile, "w")
+    f.write("body;x-coordinate;y-coordinate;z-coordinate\n")
+    planets = ["sun", "jupiter", "saturn", "uranus", "neptune"]
     for i in range(n):
         for ([x1, y1, z1], v1, m1, [x2, y2, z2], v2, m2) in pairs:
             dx = x1 - x2
@@ -85,12 +89,16 @@ def advance(dt, n, bodies=SYSTEM, pairs=PAIRS):
             v2[2] += dz * b1m
             v2[1] += dy * b1m
             v2[0] += dx * b1m
+        count = 0
         for (r, [vx, vy, vz], m) in bodies:
+            planet = (planets[count])
             r[0] += dt * vx
             r[1] += dt * vy
             r[2] += dt * vz
-
-
+            line = planet + ";" + str(r[0]) + ";" + str(r[1]) + ";" + str(r[2]) + "\n"
+            f.write(line)
+            count += 1
+    f.close()
 def report_energy(bodies=SYSTEM, pairs=PAIRS, e=0.0):
     for ((x1, y1, z1), v1, m1, (x2, y2, z2), v2, m2) in pairs:
         dx = x1 - x2

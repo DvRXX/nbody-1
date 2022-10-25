@@ -14,7 +14,10 @@
 #define _USE_MATH_DEFINES // https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants?view=msvc-160
 #include <cmath>
 #include <iostream>
-
+#include <fstream>
+#include <string>
+#include <sstream>
+using namespace std;
 
 // these values are constant and not allowed to be changed
 const double SOLAR_MASS = 4 * M_PI * M_PI;
@@ -94,7 +97,7 @@ public:
 };
 
 
-void advance(body state[BODIES_COUNT], double dt) {
+void advance(body state[BODIES_COUNT], double dt, bool print) {
     /*
      * We precompute the quantity (r_i - r_j)
      */
@@ -133,6 +136,10 @@ void advance(body state[BODIES_COUNT], double dt) {
      */
     for (unsigned int i = 0; i < BODIES_COUNT; ++i) {
         state[i].position += state[i].velocity * dt;
+        if (print) {
+            ofstream file_name("textfile.txt", std::ios_base::app);
+            file_name << state[i].name << ";" << state[i].position.x << ";" << state[i].position.y << ";" << state[i].position.z << "\n";
+        }
     }
 }
 
@@ -240,19 +247,26 @@ body state[] = {
 
 
 int main(int argc, char **argv) {
-    if (argc != 2) {
+    if (argc != 3) {
         std::cout << "This is " << argv[0] << std::endl;
         std::cout << "Call this program with an integer as program argument" << std::endl;
         std::cout << "(to set the number of iterations for the n-body simulation)." << std::endl;
         return EXIT_FAILURE;
     } else {
         const unsigned int n = atoi(argv[1]);
+        bool print;
+        std::istringstream(argv[2]) >> print;
+        if (print) {
+            ofstream file_name("textfile.txt");
+            file_name << "body;x-coordinate;y-coordinate;z-coordinate\n";
+        }
         offset_momentum(state);
         std::cout << energy(state) << std::endl;
         for (int i = 0; i < n; ++i) {
-            advance(state, 0.01);
+            advance(state, 0.01, print);
         }
         std::cout << energy(state) << std::endl;
         return EXIT_SUCCESS;
     }
+
 }
