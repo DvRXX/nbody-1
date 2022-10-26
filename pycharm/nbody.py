@@ -70,7 +70,7 @@ PAIRS = tuple(combinations(SYSTEM))
 
 
 def advance(dt, n, bodies=SYSTEM, pairs=PAIRS):
-    textfile = "python" + str(n) + ".txt"
+    textfile = "python" + str(n) + ".csv"
     f = open(textfile, "w")
     f.write("body;x-coordinate;y-coordinate;z-coordinate\n")
     planets = ["sun", "jupiter", "saturn", "uranus", "neptune"]

@@ -137,7 +137,7 @@ void advance(body state[BODIES_COUNT], double dt, bool print) {
     for (unsigned int i = 0; i < BODIES_COUNT; ++i) {
         state[i].position += state[i].velocity * dt;
         if (print) {
-            ofstream file_name("textfile.txt", std::ios_base::app);
+            ofstream file_name("textfile.csv", std::ios_base::app);
             file_name << state[i].name << ";" << state[i].position.x << ";" << state[i].position.y << ";" << state[i].position.z << "\n";
         }
     }
@@ -257,7 +257,7 @@ int main(int argc, char **argv) {
         bool print;
         std::istringstream(argv[2]) >> print;
         if (print) {
-            ofstream file_name("textfile.txt");
+            ofstream file_name("textfile.csv");
             file_name << "body;x-coordinate;y-coordinate;z-coordinate\n";
         }
         offset_momentum(state);
